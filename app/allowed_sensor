@@ -1,0 +1,12 @@
+sensors = [
+    "get_temperature",
+    "get_humidity",
+    "get_pressure",
+    "get_sound_level",
+    "get_light_intensity",
+    "get_air_quality",
+    "get_motion",
+    "get_vibration",
+    "get_distance",
+    "get_ph"
+]

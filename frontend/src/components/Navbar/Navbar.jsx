@@ -1,88 +1,82 @@
-import React from 'react'
-import { Link , NavLink } from 'react-scroll'
-import robo_logo from '../../assets/robo_logo.png'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import LoginModal from './LoginModal';
+import robo_logo from '../../assets/robo_logo.png';
 
-const is_user_logged_in = false;
+const Navbar = () => {
+  const { isLoggedIn, logout } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-export const Navbar = () => {
-    return (
-        <div className='fixed w-full'>
-            <div>
-                <div className=' flex flex-row justify-between p-5 md:px-16 px-5 bg-white shadow-[0_3px_10px_rgba(0,0,0,0.2)]' >
-                    <div className='flex flex-row items-center cursor-pointer' >
-                        <span>
-                            <img src={robo_logo} alt="Virtual Machine" className='-mt-1 h-9' />
-                        </span>
-                        <h1 className='text-3xl font-semibold ml-2' >Virtual Machine</h1>
-                    </div>
-                    <nav className='hidden md:flex flex-row items-center text-lg font-medium gap-8' >
-                        <Link
-                            to="/"
-                            spy={true}
-                            smooth={true}
-                            duration={500}
-                            className='hover:text-sky-400 transsition cursor-pointer'
-                        >Home</Link>
-                        <Link
-                            to="/about"
-                            spy={true}
-                            smooth={true}
-                            duration={500}
-                            className='hover:text-sky-400 transsition cursor-pointer'
-                        >About</Link>
-                        <Link
-                            to="/services"
-                            spy={true}
-                            smooth={true}
-                            duration={500}
-                            className='hover:text-sky-400 transsition cursor-pointer'
-                        >Services</Link>
-                    </nav>
-                    {is_user_logged_in ? (
-                        <div className='hidden md:flex flex-row items-center gap-6'>
-                            <Link
-                                to="/profile"
-                                spy={true}
-                                smooth={true}
-                                duration={500}
-                                className='bg-green-900 font-bold text-white px-4 py-2 rounded-lg hover:bg-green-600 transition cursor-pointer'
-                            >
-                                Profile
-                            </Link>
-                            <Link
-                                to="logout"
-                                spy={true}
-                                smooth={true}
-                                duration={500}
-                                className='bg-red-900 font-bold text-white px-4 py-2 rounded-lg hover:bg-red-600 transition cursor-pointer'
-                            >
-                                Logout
-                            </Link>
-                        </div>
-                    ) : (
-                        <div className='hidden md:flex flex-row items-center gap-6'>
-                            <Link
-                                to="/signup"
-                                spy={true}
-                                smooth={true}
-                                duration={500}
-                                className='bg-cyan-900 font-bold text-white px-4 py-2 rounded-lg hover:bg-cyan-600 transition cursor-pointer'
-                            >
-                                Sign Up
-                            </Link>
-                            <Link
-                                to="/login"
-                                spy={true}
-                                smooth={true}
-                                duration={500}
-                                className='bg-cyan-900 font-bold text-white px-4 py-2 rounded-lg hover:bg-cyan-600 transition cursor-pointer'
-                            >
-                                Login
-                            </Link>
-                        </div>
-                    )}
-                </div>
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  const handleCloseModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  return (
+    <>
+      <nav className="bg-white shadow-lg">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center h-16">
+            {/* Left section with logo and title */}
+            <div className="flex items-center">
+              <img src={robo_logo} alt="Robot Logo" className="h-8 w-8 mr-2" />
+              <Link to="/" className="text-xl font-bold text-gray-800">
+                Virtual Machine
+              </Link>
             </div>
+
+            {/* Center navigation links */}
+            <div className="flex space-x-8">
+              <Link to="/" className="text-gray-600 hover:text-gray-900">
+                Home
+              </Link>
+              <Link to="/server" className="text-gray-600 hover:text-gray-900">
+                Server
+              </Link>
+              <Link to="/about" className="text-gray-600 hover:text-gray-900">
+                About
+              </Link>
+            </div>
+
+            {/* Right section with login/logout button */}
+            <div>
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300"
+                >
+                  Logout
+                </button>
+              ) : (
+                <button
+                  onClick={handleLoginClick}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+                >
+                  Login
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-    )
-}
+      </nav>
+
+      {/* Login Modal */}
+      {isLoginModalOpen && (
+        <LoginModal 
+          isOpen={isLoginModalOpen} 
+          onClose={handleCloseModal} 
+        />
+      )}
+    </>
+  );
+};
+
+export default Navbar;
